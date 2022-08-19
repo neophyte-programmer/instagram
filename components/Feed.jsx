@@ -1,11 +1,12 @@
 import React from 'react'
+import { Stories } from './components'
 
 const Feed = () => {
   return (
       <main>
           {/* Main Feed */}
           <section>
-              {/* Stories */}
+            <Stories />
               {/* Posts */}
           </section>
 
