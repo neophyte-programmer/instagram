@@ -7,7 +7,7 @@ module.exports = {
 	theme: {
 		extend: {},
 	},
-	plugins: [require('@tailwindcss/forms'), require('tailwind-scrollbar')],
+	plugins: [require('@tailwindcss/forms'), require('tailwind-scrollbar'), require('tailwind-scrollbar-hide')],
 	variants: {
 		scrollbar: ['rounded'],
 	},
