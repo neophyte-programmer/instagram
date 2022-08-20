@@ -1,33 +1,35 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { Story } from './components'
 
 const Stories = () => {
-    const [suggestions, setSuggestions] = useState([])
+	const [suggestions, setSuggestions] = useState([])
 
-    // Runs when component loads on screen
-    useEffect(() => {
-        // generat 20 arrays with faker-js info
-        const suggest = [...Array(20)].map((_, index) => ({
-            // ...faker.helpers.contextualCard(),
-            id: index,
-            name: faker.name.firstName(),
-            image: faker.image.avatar()
+	// Runs when component loads on screen
+	useEffect(() => {
+		// generate 20 arrays with faker-js info
+		const suggest = [...Array(20)].map((_, index) => ({
+			id: index,
+			name: `${faker.name.firstName().toLowerCase()}_${faker.name
+				.firstName()
+				.toLowerCase()} `,
+			image: faker.image.avatar(),
+		}))
+		setSuggestions(suggest)
+	}, [])
 
-
-        }))
-        setSuggestions(suggest);
-    }, [])
-
-  return (
-      <div>
-          {
-              suggestions && suggestions.map((profile) => (
-                  <Story key={profile.id} img={profile.image} username={profile.name} />
-              ))
-          }
-    </div>
-  )
+	return (
+		<div className='flex gap-2 p-6 bg-white mt-8 border-gray-200 border rounded-sm overflow-x-scroll scrollbar-thin scrollbar-thumb-red-300 hover:scrollbar-thumb-red-400 cursor-pointer drop-shadow-sm '>
+			{suggestions &&
+				suggestions.map((profile) => (
+					<Story
+						key={profile.id}
+						img={profile.image}
+				    		username={profile.name}
+					/>
+				))}
+		</div>
+	)
 }
 
 export default Stories
