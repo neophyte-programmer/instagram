@@ -4,7 +4,7 @@ import {Header, Feed} from '../components/components'
 
 const Home: NextPage = () => {
   return (
-    <div className="">
+    <div className="bg-gray-50 h-screen overflow-y-scroll scrollbar-hide">
       <Head>
         <title>Instagram</title>
         <link rel="icon" type='image/png' href="/logo.png" />
