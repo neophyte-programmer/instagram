@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.4.0",
     "faker": "^6.6.6",
     "next": "latest",
     "react": "18.1.0",
