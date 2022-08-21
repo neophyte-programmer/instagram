@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stories, Posts } from './components'
+import { Stories, Posts, MiniProfile, Suggestions } from './components'
 
 const Feed = () => {
 	return (
@@ -11,9 +11,9 @@ const Feed = () => {
 			</section>
 
 			{/* Side Section */}
-			<section>
-				{/* Mini Profile */}
-				{/* Suggestions */}
+			<section className='hidden xl:inline-grid md:col-span-1'>
+        <MiniProfile />
+        <Suggestions />
 			</section>
 		</main>
 	)
