@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaEllipsisV, FaFacebookF } from 'react-icons/fa'
-import { BsWhatsapp, BsTwitter, BsBookmark } from 'react-icons/bs'
+import { BsWhatsapp, BsTwitter, BsBookmark, BsEmojiLaughing } from 'react-icons/bs'
 import { AiOutlineHeart, AiOutlineComment, AiFillHeart} from 'react-icons/ai'
 import { HiOutlinePaperAirplane} from 'react-icons/hi'
 
@@ -27,7 +27,7 @@ const Post = ({ userName, userImg, postImage, caption }) => {
 					onClick={showShareMenu}
 				/>
 				{shareMenu && (
-					<div className='absolute -right-[12.5rem] bottom-2 z-50 mt-4 w-max bg-white shadow-md text-base '>
+					<div className='absolute right-[2.5rem] -bottom-12 z-50 mt-4 w-max bg-white shadow-md text-base '>
 						<ul className=' mx-auto'>
 							<li
 								className='border-b cursor-pointer hover:bg-gray-100 px-4 py-2 duration-100 transition-all ease-in-out flex items-center gap-3 text-base'
@@ -87,7 +87,11 @@ const Post = ({ userName, userImg, postImage, caption }) => {
 			{/* Comments */}
 
             {/* Input Box */}
-            <form></form>
+            <form className='flex items-center p-4'>
+                <BsEmojiLaughing className='btn' />
+                <input type="text" className='border-none flex-1 border-b-2 focus:ring-0 outline-none border-black' placeholder='Add a comment...' />
+                <button className='font-semibold text-blue-400'>Post</button>
+            </form>
 		</div>
 	)
 }
