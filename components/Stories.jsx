@@ -19,7 +19,7 @@ const Stories = () => {
 	}, [])
 
 	return (
-		<div className='flex gap-2 p-6 bg-white mt-8 border-gray-200 border rounded-sm overflow-x-scroll scrollbar-thin scrollbar-thumb-red-300 hover:scrollbar-thumb-red-400 cursor-pointer drop-shadow-sm '>
+		<div className='flex gap-2 p-6 bg-white mt-8 border-gray-200 border rounded-sm overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-200 hover:scrollbar-thumb-gray-300 cursor-pointer drop-shadow-sm '>
 			{suggestions &&
 				suggestions.map((profile) => (
 					<Story
