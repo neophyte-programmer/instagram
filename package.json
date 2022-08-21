@@ -8,6 +8,7 @@
   "dependencies": {
     "@faker-js/faker": "^7.4.0",
     "faker": "^6.6.6",
+    "firebase": "^9.9.3",
     "next": "latest",
     "next-auth": "^4.10.3",
     "react": "18.1.0",
