@@ -12,9 +12,9 @@ const Post = ({ userName, userImg, postImage, caption }) => {
 	}
 
 	return (
-		<div className='my-7 bg-white shadow-sm rounded-lg w-full'>
+		<div className='my-7 bg-white shadow-md rounded-xl w-full'>
 			{/* Header */}
-			<div className='flex items-center p-5 bg-white relative'>
+			<div className='flex items-center p-5 bg-white relative rounded-xl'>
 				<img
 					src={userImg}
 					alt=''
@@ -78,11 +78,16 @@ const Post = ({ userName, userImg, postImage, caption }) => {
                 </div>
             </div>
 
-			{/* Captions */}
+            {/* Captions */}
+            <p className='p-5 truncate'>
+                <span className='font-bold mr-1'>{userName} </span>
+                {caption}
+            </p>
 
 			{/* Comments */}
 
-			{/* Input Box */}
+            {/* Input Box */}
+            <form></form>
 		</div>
 	)
 }
