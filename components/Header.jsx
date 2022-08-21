@@ -41,9 +41,9 @@ const Header = () => {
 					<HiOutlineUserGroup className='navBtn' />
 					<BsHeart className='navBtn' />
 					<img
-						src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDtQ4YYvu990oOH2z_4HMlVEyMv_1pxubhuc0sffLu6tjmcx9LSoaFxtIV3xGK3TygpHY&usqp=CAU'
+						src='https://htmlstream.com/preview/unify-v2.6/assets/img-temp/400x450/img5.jpg'
 						alt='profile'
-						className='w-10 h-10 rounded-full object-contain cursor-pointer shadow-lg'
+						className='w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg'
 					/>
 				</div>
 			</div>
