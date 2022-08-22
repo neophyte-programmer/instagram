@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { Story } from './components'
+import {useSession} from 'next-auth/react'
 
 const Stories = () => {
+	const { data: session } = useSession()
+
 	const [suggestions, setSuggestions] = useState([])
 
 	// Runs when component loads on screen
@@ -20,6 +23,11 @@ const Stories = () => {
 
 	return (
 		<div className='flex gap-2 p-6 bg-white mt-8 border-gray-200 border rounded-sm overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-200 hover:scrollbar-thumb-gray-300 cursor-pointer drop-shadow-sm '>
+			{
+				session && (
+					<Story img={session?.user.image} username={session?.user.username} />
+				)
+			}
 			{suggestions &&
 				suggestions.map((profile) => (
 					<Story
