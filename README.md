@@ -23,6 +23,7 @@ This is a clone of instagram built with:
 - [FakerJS](https://fakerjs.dev/)
 - [Firebase](https://firebase.google.com/)
 - [NextAuthJs](https://github.com/nextauthjs/next-auth)
+- [Recoil](https://recoiljs.org/)
 
 ## Demo
 Not avalable yet
