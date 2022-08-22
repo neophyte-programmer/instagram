@@ -1,11 +1,16 @@
 import React from 'react'
 import Image from 'next/image'
+import { useSession, signIn, signOut } from 'next-auth/react'
 import { instagram, ig } from './images'
 import { BsSearch, BsPlusCircle, BsHeart } from 'react-icons/bs'
 import { AiOutlineHome, AiOutlineMenu } from 'react-icons/ai'
 import { HiOutlinePaperAirplane, HiOutlineUserGroup } from 'react-icons/hi'
 
 const Header = () => {
+	// Pull in session information
+	const { data: session } = useSession()
+	console.log(session)
+
 	return (
 		<div className='flex justify-center w-screen shadow-sm border-b bg-white sticky top-0 z-50'>
 			<div className='flex justify-between bg-white w-full max-w-6xl items-center lg:mx-auto p-2'>
@@ -33,18 +38,28 @@ const Header = () => {
 				<div className='flex items-center justify-end space-x-4'>
 					<AiOutlineHome className='navBtn' />
 					<AiOutlineMenu className='text-xl cursor-pointer md:hidden' />
-					<div className='relative navBtn'>
-                        <HiOutlinePaperAirplane className='navBtn rotate-45' />
-                        <div className='absolute -top-2 -right-1 text-xs w-5 h-5 bg-red-500 rounded-full text-white font-bold flex items-center justify-center animate-pulse'>3</div>
-					</div>
-					<BsPlusCircle className='navBtn' />
-					<HiOutlineUserGroup className='navBtn' />
-					<BsHeart className='navBtn' />
-					<img
-						src='https://htmlstream.com/preview/unify-v2.6/assets/img-temp/400x450/img5.jpg'
-						alt='profile'
-						className='w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg'
-					/>
+
+					{session ? (
+						<>
+							<div className='relative navBtn'>
+								<HiOutlinePaperAirplane className='navBtn rotate-45' />
+								<div className='absolute -top-2 -right-1 text-xs w-5 h-5 bg-red-500 rounded-full text-white font-bold flex items-center justify-center animate-pulse'>
+									3
+								</div>
+							</div>
+							<BsPlusCircle className='navBtn' />
+							<HiOutlineUserGroup className='navBtn' />
+							<BsHeart className='navBtn' />
+							<img
+								src={session.user.image}
+								alt='profile'
+								className='w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg'
+								onClick={signOut}
+							/>
+						</>
+					) : (
+						<button className='text-bold text-blue-400' onClick={signIn}>Sign In</button>
+					)}
 				</div>
 			</div>
 		</div>
