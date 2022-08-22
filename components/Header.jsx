@@ -3,13 +3,16 @@ import Image from 'next/image'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { instagram, ig } from './images'
 import { BsSearch, BsPlusCircle, BsHeart } from 'react-icons/bs'
-import { AiOutlineHome, AiOutlineMenu } from 'react-icons/ai'
+import { AiOutlineHome } from 'react-icons/ai'
 import { HiOutlinePaperAirplane, HiOutlineUserGroup } from 'react-icons/hi'
 import { useRouter } from 'next/router'
+import { useRecoilState } from 'recoil'
+import { modalState } from "../atoms/modalAtom"
 
 const Header = () => {
 	// Pull in session information
 	const { data: session } = useSession()
+	const [open, setOpen] = useRecoilState(modalState)
 	const router = useRouter()
 
 	return (
@@ -17,10 +20,20 @@ const Header = () => {
 			<div className='flex justify-between bg-white w-full max-w-6xl items-center lg:mx-auto px-2 py-1'>
 				{/* Left */}
 				<div className='relative h-20 w-32 hidden lg:inline-grid cursor-pointer'>
-					<Image src={instagram} layout='fill' objectFit='contain' onClick={() => router.push("/")} />
+					<Image
+						src={instagram}
+						layout='fill'
+						objectFit='contain'
+						onClick={() => router.push('/')}
+					/>
 				</div>
-				<div className='relative h-10 w-10 flex-shrink-0 lg:hidden cursor-pointer'  >
-					<Image src={ig} layout='fill' objectFit='contain' onClick={() => router.push("/")} />
+				<div className='relative h-10 w-10 flex-shrink-0 lg:hidden cursor-pointer'>
+					<Image
+						src={ig}
+						layout='fill'
+						objectFit='contain'
+						onClick={() => router.push('/')}
+					/>
 				</div>
 				{/* Middle */}
 				<div className='max-w-xs hidden md:flex'>
@@ -37,7 +50,10 @@ const Header = () => {
 				</div>
 				{/* Right */}
 				<div className='flex items-center justify-end space-x-4'>
-					<AiOutlineHome className='navBtn2' onClick={() => router.push("/")} />
+					<AiOutlineHome
+						className='navBtn2'
+						onClick={() => router.push('/')}
+					/>
 					{/* <AiOutlineMenu className='text-xl cursor-pointer md:hidden' /> */}
 
 					{session ? (
@@ -48,7 +64,8 @@ const Header = () => {
 									3
 								</div>
 							</div>
-							<BsPlusCircle className='navBtn2' />
+							{/* Show modal */}
+							<BsPlusCircle className='navBtn2' onClick={() => setOpen(true)} />
 							<HiOutlineUserGroup className='navBtn' />
 							<BsHeart className='navBtn' />
 							<img
@@ -59,7 +76,12 @@ const Header = () => {
 							/>
 						</>
 					) : (
-						<button className='text-bold text-blue-400' onClick={signIn}>Sign In</button>
+						<button
+							className='text-bold text-blue-400'
+							onClick={signIn}
+						>
+							Sign In
+						</button>
 					)}
 				</div>
 			</div>
