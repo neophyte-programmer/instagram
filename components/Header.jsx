@@ -13,7 +13,7 @@ const Header = () => {
 
 	return (
 		<div className='flex justify-center w-screen shadow-sm border-b bg-white sticky top-0 z-50'>
-			<div className='flex justify-between bg-white w-full max-w-6xl items-center lg:mx-auto p-2'>
+			<div className='flex justify-between bg-white w-full max-w-6xl items-center lg:mx-auto px-2'>
 				{/* Left */}
 				<div className='relative h-20 w-32 hidden lg:inline-grid cursor-pointer'>
 					<Image src={instagram} layout='fill' objectFit='contain' />
