@@ -9,5 +9,13 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
     // ...add more providers here
-  ],
+    ],
+    // theme: {
+    //     logo: "https://www.instagram.com/",
+    //     brandColor: "#BF0194",
+    //     colorScheme: "auto"
+    // }
+    pages: {
+        signIn: "/auth/signin",
+    }
 })
