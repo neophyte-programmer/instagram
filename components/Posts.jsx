@@ -1,36 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Post } from './components'
+import { onSnapshot, collection, query, orderBy } from '@firebase/firestore'
+import { db } from '../firebase'
 
-const dummyData = [
-    {
-        id: 1,
-        userName: "n.utifafa",
-        userImg: 'https://xsgames.co/randomusers/assets/avatars/male/74.jpg',
-        postImage: "https://www.lifewire.com/thmb/vF2JQGiBs5KyXDZq5z5tEl4-EIU=/2200x1466/filters:fill(auto,1)/city_AlexanderSpatari_Getty-5a13972b47c26600378f0216.jpg",
-        caption: 'Overview from my home'
-
-    },
-    {
-        id: 2,
-        userName: "theodore_a",
-        userImg: 'https://xsgames.co/randomusers/assets/avatars/male/46.jpg',
-        postImage: "https://www.shutterbug.com/images/styles/600_wide/public/promocloseups8816.png",
-        caption: 'Overview from my home'
-
-    },
-]
 
 const Posts = () => {
-  return (
-      <div>
-          {
-              dummyData && dummyData.map((post) => (
-                    <Post key={post.id} userName={post.userName} userImg={post.userImg} postImage={post.postImage} caption={post.caption}  /> 
-                  
-              ))
-          }
-    </div>
-  )
+	const [posts, setPosts] = useState([])
+
+	useEffect(() => {
+		// Query posts by server timestamp
+		return onSnapshot(
+			query(collection(db, 'posts'), orderBy('timestamp', 'desc')),
+			(snapshot) => {
+				setPosts(snapshot.docs)
+			}
+		)
+    }, [db])
+    
+    console.log(posts);
+
+	return (
+        <div>
+            {/* Call data from database */}
+			{posts &&
+				posts.map((post) => (
+					<Post
+                        key={post.id}
+                        id={post.id}
+						userName={post.data().username}
+						userImg={post.data().userImg}
+						postImage={post.data().image}
+						caption={post.data().caption}
+					/>
+				))}
+		</div>
+	)
 }
 
 export default Posts
