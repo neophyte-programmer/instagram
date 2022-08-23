@@ -24,6 +24,7 @@ This is a clone of instagram built with:
 - [Firebase](https://firebase.google.com/)
 - [NextAuthJs](https://github.com/nextauthjs/next-auth)
 - [Recoil](https://recoiljs.org/)
+- [Headless UI](https://headlessui.com/)
 
 ## Demo
 Not avalable yet
