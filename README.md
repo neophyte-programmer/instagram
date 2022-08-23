@@ -25,6 +25,7 @@ This is a clone of instagram built with:
 - [NextAuthJs](https://github.com/nextauthjs/next-auth)
 - [Recoil](https://recoiljs.org/)
 - [Headless UI](https://headlessui.com/)
+- [React Moment](https://www.npmjs.com/package/react-moment)
 
 ## Demo
 Not avalable yet
