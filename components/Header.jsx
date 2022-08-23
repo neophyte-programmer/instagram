@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { instagram, ig } from './images'
 import { BsSearch, BsPlusCircle, BsHeart } from 'react-icons/bs'
-import { AiOutlineHome } from 'react-icons/ai'
+import { AiOutlineHome, AiOutlinePlus } from 'react-icons/ai'
 import { HiOutlinePaperAirplane, HiOutlineUserGroup } from 'react-icons/hi'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
@@ -65,7 +65,7 @@ const Header = () => {
 								</div>
 							</div>
 							{/* Show modal */}
-							<BsPlusCircle className='navBtn2' onClick={() => setOpen(true)} />
+							<AiOutlinePlus className='navBtn2' onClick={() => setOpen(true)} />
 							<HiOutlineUserGroup className='navBtn' />
 							<BsHeart className='navBtn' />
 							<img
