@@ -1,16 +1,53 @@
 import React, { Fragment, useRef, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { useRecoilState } from 'recoil'
 import { modalState } from '../atoms/modalAtom'
 import { Dialog, Transition } from '@headlessui/react'
 import { BsCamera } from 'react-icons/bs'
 import { AiOutlineDelete } from 'react-icons/ai'
+import { db, storage } from '../firebase'
+import { addDoc, collection, serverTimestamp, updateDoc, doc } from '@firebase/firestore'
+import { ref, getDownloadURL, uploadString } from "@firebase/storage"
 
 const Modal = () => {
+	const { data: session } = useSession()
 	const [open, setOpen] = useRecoilState(modalState)
 	const filePickerRef = useRef(null)
+	const captionRef = useRef(null)
 	const [selectedFile, setSelectedFile] = useState(null)
+	const [loading, setLoading] = useState(false)
 
-	const uploadPost = () => {}
+	const uploadPost = async () => {
+		if (loading) return
+		setLoading(true)
+
+		// Create post and add to firestore( posts collection)
+        const docRef = await addDoc(collection(db, 'posts'), {
+            username: session.user.username,
+            caption: captionRef.current.value,
+            userImg: session.user.image,
+            timestamp: serverTimestamp()
+        })
+      
+		// Get post id for new post
+        console.log(`New doc added with ID: ${docRef.id}`);
+
+		// upload image to firebase storage with popst id
+        const imageRef = ref(storage, `posts/${docRef.id}/image`)
+
+        await uploadString(imageRef, selectedFile, "data_url").then(async snapshot => {
+		    // get download url from firebase storage and update original post with image
+            const downloadURL = await getDownloadURL(imageRef)
+            await updateDoc(doc(db, 'posts', docRef.id), {
+                image: downloadURL
+            })
+        })
+
+        setOpen(false)
+        setLoading(false)
+        setSelectedFile(null)
+	}
+
 	const addImageToPost = (e) => {
 		const reader = new FileReader()
 		if (e.target.files[0]) {
@@ -65,7 +102,12 @@ const Modal = () => {
 											alt=''
 											className='w-full relative rounded-lg object-cover h-full max-h-[300px]'
 										/>
-										<button className='bg-red-500 absolute right-0 bottom-0 m-1 cursor-pointer inline-block p-2 rounded-full hover:bg-red-600' onClick={() => setSelectedFile(null)}>
+										<button
+											className='bg-red-500 absolute right-0 bottom-0 m-1 cursor-pointer inline-block p-2 rounded-full hover:bg-red-600'
+											onClick={() =>
+												setSelectedFile(null)
+											}
+										>
 											<AiOutlineDelete className='  text-2xl text-white ' />
 										</button>
 									</div>
@@ -104,7 +146,7 @@ const Modal = () => {
 											<input
 												type='text'
 												className='border-none border-b-2 border-gray-200 focus:ring-0 w-full '
-												// ref={captionRef}
+												ref={captionRef}
 												placeholder='Please enter a caption....'
 											/>
 										</div>
@@ -116,10 +158,9 @@ const Modal = () => {
 										className='inline-flex justify-center w-full rounded-lg border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-600 focus:outline-none disabled:bg-blue-300 capitalize disabled:cursor-not-allowed sm:text-sm'
 										type='button'
 										disabled={!selectedFile}
-										// onClick={uploadPost}
+										onClick={uploadPost}
 									>
-										{/* {loading ? "Uploading... " : "Upload Post"} */}
-										Upload
+										{loading ? "Uploading... " : "Upload Post"}
 									</button>
 								</div>
 							</div>
