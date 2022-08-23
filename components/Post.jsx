@@ -1,14 +1,59 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaEllipsisV, FaFacebookF } from 'react-icons/fa'
-import { BsWhatsapp, BsTwitter, BsBookmark, BsEmojiLaughing } from 'react-icons/bs'
-import { AiOutlineHeart, AiOutlineComment, AiFillHeart} from 'react-icons/ai'
-import { HiOutlinePaperAirplane} from 'react-icons/hi'
+import {
+	BsWhatsapp,
+	BsTwitter,
+	BsBookmark,
+	BsEmojiLaughing,
+} from 'react-icons/bs'
+import { AiOutlineHeart, AiOutlineComment, AiFillHeart } from 'react-icons/ai'
+import { HiOutlinePaperAirplane } from 'react-icons/hi'
+import {
+	addDoc,
+	collection,
+	serverTimestamp,
+	updateDoc,
+	doc,
+	onSnapshot,
+	query,
+	orderBy,
+} from '@firebase/firestore'
+import { db } from '../firebase'
+import { useSession } from 'next-auth/react'
 
-const Post = ({ userName, userImg, postImage, caption }) => {
+const Post = ({ id, userName, userImg, postImage, caption }) => {
+	const { data: session } = useSession()
 	const [shareMenu, setShareMenu] = useState(false)
+	const [comment, setComment] = useState("")
+	const [comments, setComments] = useState([])
 
 	const showShareMenu = () => {
 		setShareMenu((menu) => !menu)
+	}
+
+	// Call realtime comments from database
+	useEffect(() => {
+		return onSnapshot(
+			query(collection(db, 'posts', id, 'comments'), orderBy('timestamp', 'desc')),
+			(snapshot) => {
+				setComments(snapshot.docs)
+			}
+		)
+	}, [db])
+
+	const sendComment = async (e) => {
+		e.preventDefault
+
+		const commentToSend = comment
+		setComment('')
+
+		// Add comment to backend database
+		await addDoc(collection(db, 'posts', id, 'comments'), {
+			comment: commentToSend,
+			username: session.user.username,
+			userImage: session.user.image,
+			timestamp: serverTimestamp(),
+		})
 	}
 
 	return (
@@ -66,32 +111,57 @@ const Post = ({ userName, userImg, postImage, caption }) => {
 				<img src={postImage} alt='' className='w-full object-cover' />
 			</div>
 
-            {/* Buttons */}
-            <div className='bg-white p-5 w-full flex items-center justify-between'>
-                <div className='flex items-center gap-3'>
-                    <AiOutlineHeart className='btn' />
-                    <AiOutlineComment className='btn' />
-                    <HiOutlinePaperAirplane className='btn rotate-90' />
-                </div>
-                <div>
-                    <BsBookmark className='btn' />
-                </div>
-            </div>
+			{/* Buttons */}
+			<div className='bg-white p-5 w-full flex items-center justify-between'>
+				<div className='flex items-center gap-3'>
+					<AiOutlineHeart className='btn' />
+					<AiOutlineComment className='btn' />
+					<HiOutlinePaperAirplane className='btn rotate-90' />
+				</div>
+				<div>
+					<BsBookmark className='btn' />
+				</div>
+			</div>
 
-            {/* Captions */}
-            <p className='p-5 truncate'>
-                <span className='font-bold mr-1'>{userName} </span>
-                {caption}
-            </p>
+			{/* Captions */}
+			<p className='p-5 truncate'>
+				<span className='font-bold mr-1'>{userName} </span>
+				{caption}
+			</p>
 
 			{/* Comments */}
+			{
+				comments.length > 0 && (
+					<div className='ml-10 h-20 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300'>
+						{comments.map(comment => (
+							<div key={comment.id} className="flex items-center gap-2 mb-3">
+								<img src={comment.data().userImage} alt="" className='h-7 w-7 rounded-full object-contain' />
+								<p className='text-sm flex-1'> <span className='font-bold'>{comment.data().username} </span>{comment.data().comment}</p>
+							</div>
+						))}
+					</div>
+				)
+			}
 
-            {/* Input Box */}
-            <form className='flex items-center p-4'>
-                <BsEmojiLaughing className='btn' />
-                <input type="text" className='border-none flex-1 border-b-2 focus:ring-0 outline-none border-black' placeholder='Add a comment...' />
-                <button className='font-semibold text-blue-400'>Post</button>
-            </form>
+			{/* Input Box */}
+			<form className='flex items-center p-4'>
+				<BsEmojiLaughing className='btn' />
+				<input
+					type='text'
+					className='border-none flex-1 border-b-2 focus:ring-0 outline-none border-black'
+					placeholder='Add a comment...'
+					value={comment}
+					onChange={(e) => setComment(e.target.value)}
+				/>
+				<button
+					type='submit'
+					disabled={!comment.trim()}
+					onClick={sendComment}
+					className='font-semibold text-blue-400'
+				>
+					Post
+				</button>
+			</form>
 		</div>
 	)
 }
