@@ -14,6 +14,15 @@ This is a clone of instagram built with:
 
 </p>
 
+This application is completely functional and responsive. Users can
+- Sign in straightaway with Google
+- Create images
+- Add comments to posts
+- Like and unlike posts
+- And view other people's posts
+
+The comments and posts also update in realtime
+
 
 ## Dependencies
 - [Tailwind Forms](https://github.com/tailwindlabs/tailwindcss-forms)
@@ -28,7 +37,9 @@ This is a clone of instagram built with:
 - [React Moment](https://www.npmjs.com/package/react-moment)
 
 ## Demo
-Not avalable yet
+Not avalable yet.
+
+I am currently looking for help with vercel deployment
 
 ## Preview
 
