@@ -49,9 +49,20 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 	}, [db, id])
 
 	// Call likes from database
+
 	useEffect(() => {
-		setHasLiked(likes.findIndex((like) => like.id === session?.user?.uid) !== -1)
-	}, [likes])
+		return onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) => {
+			setLikes(snapshot.docs)
+		})
+	}, [db, id])
+
+	useEffect(
+		() =>
+			setHasLiked(
+				likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+			),
+		[likes]
+	)
 
 	const sendComment = async (e) => {
 		e.preventDefault
@@ -78,6 +89,8 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 			})
 		}
 	}
+
+	console.log(hasLiked)
 
 	return (
 		<div className='my-7 bg-white shadow-md rounded-xl w-full'>
@@ -131,7 +144,7 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 
 			{/* Post image */}
 			<div className='w-full '>
-				<img src={postImage} alt='' className='w-full object-cover' />
+				<img src={postImage} alt='' className='w-full max-h-[500px] object-cover' />
 			</div>
 
 			{/* Buttons */}
