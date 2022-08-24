@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { instagram, ig } from './images'
-import { BsSearch, BsPlusCircle, BsHeart } from 'react-icons/bs'
+import { BsSearch, BsHeart } from 'react-icons/bs'
 import { AiOutlineHome, AiOutlinePlus } from 'react-icons/ai'
 import { HiOutlinePaperAirplane, HiOutlineUserGroup } from 'react-icons/hi'
 import { useRouter } from 'next/router'
@@ -36,17 +36,18 @@ const Header = () => {
 					/>
 				</div>
 				{/* Middle */}
-				<div className='max-w-xs hidden md:flex'>
+				<div className='max-w-xs hidden md:flex '>
 					<div className='relative mt-1 p-3 rounded-md '>
 						<div className='absolute inset-y-0 pl-3 flex items-center pointer-events-none'>
 							<BsSearch className='h-5 w-5 text-gray-500 ' />
 						</div>
 						<input
 							type='text'
-							placeholder='Search'
+							placeholder='Created By Nutifafa'
 							className='bg-gray-50 block w-full pl-10 sm:text-sm border-gray-300 rounded-md focus:ring-black focus:border-black'
 						/>
 					</div>
+					
 				</div>
 				{/* Right */}
 				<div className='flex items-center justify-end space-x-4'>
