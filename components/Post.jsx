@@ -12,14 +12,13 @@ import {
 	addDoc,
 	collection,
 	serverTimestamp,
-	updateDoc,
-	doc,
 	onSnapshot,
 	query,
 	orderBy,
 } from '@firebase/firestore'
 import { db } from '../firebase'
 import { useSession } from 'next-auth/react'
+import Moment from "react-moment"
 
 const Post = ({ id, userName, userImg, postImage, caption }) => {
 	const { data: session } = useSession()
@@ -137,6 +136,9 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 							<div key={comment.id} className="flex items-center gap-2 mb-3">
 								<img src={comment.data().userImage} alt="" className='h-7 w-7 rounded-full object-contain' />
 								<p className='text-sm flex-1'> <span className='font-bold'>{comment.data().username} </span>{comment.data().comment}</p>
+								<Moment fromNow className='pr-5 text-xs text-gray-700'>
+									{ comment.data().timestamp?.toDate()}
+								</Moment>
 							</div>
 						))}
 					</div>
