@@ -90,7 +90,6 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 		}
 	}
 
-	console.log(hasLiked)
 
 	return (
 		<div className='my-7 bg-white shadow-md rounded-xl w-full'>
@@ -148,9 +147,16 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 			</div>
 
 			{/* Buttons */}
-			<div className='bg-white p-5 w-full flex items-center justify-between'>
+			<div className='bg-white px-5 pt-5 w-full flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
-					<AiOutlineHeart className='btn' onClick={likePost} />
+					{
+						hasLiked ? (
+							<AiFillHeart className='btn text-red-500' onClick={likePost} />
+						): (
+
+							<AiOutlineHeart className='btn' onClick={likePost} />
+						)
+					}
 					<AiOutlineComment className='btn' />
 					<HiOutlinePaperAirplane className='btn rotate-90' />
 				</div>
@@ -161,6 +167,15 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 
 			{/* Captions */}
 			<p className='p-5 truncate'>
+				{
+					likes.length > 0 && (
+						<p className='font-bold'>
+							{
+								likes.length === 1 ? `${likes.length} like` : `${likes.length} likes`
+							}
+						</p>
+					)
+				}
 				<span className='font-bold mr-1'>{userName} </span>
 				{caption}
 			</p>
