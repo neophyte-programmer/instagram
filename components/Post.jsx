@@ -10,6 +10,8 @@ import { AiOutlineHeart, AiOutlineComment, AiFillHeart } from 'react-icons/ai'
 import { HiOutlinePaperAirplane } from 'react-icons/hi'
 import {
 	addDoc,
+	setDoc,
+	doc,
 	collection,
 	serverTimestamp,
 	onSnapshot,
@@ -25,6 +27,7 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 	const [shareMenu, setShareMenu] = useState(false)
 	const [comment, setComment] = useState("")
 	const [comments, setComments] = useState([])
+	const [likes, setLikes] = useState([])
 
 	const showShareMenu = () => {
 		setShareMenu((menu) => !menu)
@@ -38,7 +41,17 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 				setComments(snapshot.docs)
 			}
 		)
-	}, [db])
+	}, [db, id])
+
+	// Call likes from database
+	useEffect(() => {
+		return onSnapshot(
+			collection(db, 'posts', id, 'likes'),
+			(snapshot) => {
+				setLikes(snapshot.docs)
+			}
+		)
+	}, [db, id])
 
 	const sendComment = async (e) => {
 		e.preventDefault
@@ -53,6 +66,13 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 			userImage: session.user.image,
 			timestamp: serverTimestamp(),
 		})
+	}
+
+	const likePost = async () => {
+		// Ensure user has only one like
+		await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+			username: session.user.username
+		}) 
 	}
 
 	return (
@@ -113,7 +133,7 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 			{/* Buttons */}
 			<div className='bg-white p-5 w-full flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
-					<AiOutlineHeart className='btn' />
+					<AiOutlineHeart className='btn' onCLick={likePost} />
 					<AiOutlineComment className='btn' />
 					<HiOutlinePaperAirplane className='btn rotate-90' />
 				</div>
