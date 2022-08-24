@@ -21,7 +21,7 @@ import {
 } from '@firebase/firestore'
 import { db } from '../firebase'
 import { useSession } from 'next-auth/react'
-import Moment from 'react-moment'
+// import Moment from 'react-moment'
 
 const Post = ({ id, userName, userImg, postImage, caption }) => {
 	const { data: session } = useSession()
