@@ -11,6 +11,7 @@ import { HiOutlinePaperAirplane } from 'react-icons/hi'
 import {
 	addDoc,
 	setDoc,
+	deleteDoc,
 	doc,
 	collection,
 	serverTimestamp,
@@ -20,14 +21,15 @@ import {
 } from '@firebase/firestore'
 import { db } from '../firebase'
 import { useSession } from 'next-auth/react'
-import Moment from "react-moment"
+import Moment from 'react-moment'
 
 const Post = ({ id, userName, userImg, postImage, caption }) => {
 	const { data: session } = useSession()
 	const [shareMenu, setShareMenu] = useState(false)
-	const [comment, setComment] = useState("")
+	const [comment, setComment] = useState('')
 	const [comments, setComments] = useState([])
 	const [likes, setLikes] = useState([])
+	const [hasLiked, setHasLiked] = useState(false)
 
 	const showShareMenu = () => {
 		setShareMenu((menu) => !menu)
@@ -36,7 +38,10 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 	// Call realtime comments from database
 	useEffect(() => {
 		return onSnapshot(
-			query(collection(db, 'posts', id, 'comments'), orderBy('timestamp', 'desc')),
+			query(
+				collection(db, 'posts', id, 'comments'),
+				orderBy('timestamp', 'desc')
+			),
 			(snapshot) => {
 				setComments(snapshot.docs)
 			}
@@ -45,13 +50,8 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 
 	// Call likes from database
 	useEffect(() => {
-		return onSnapshot(
-			collection(db, 'posts', id, 'likes'),
-			(snapshot) => {
-				setLikes(snapshot.docs)
-			}
-		)
-	}, [db, id])
+		setHasLiked(likes.findIndex((like) => like.id === session?.user?.uid) !== -1)
+	}, [likes])
 
 	const sendComment = async (e) => {
 		e.preventDefault
@@ -69,10 +69,14 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 	}
 
 	const likePost = async () => {
-		// Ensure user has only one like
-		await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
-			username: session.user.username
-		}) 
+		if (hasLiked) {
+			await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
+		} else {
+			// Ensure user has only one like
+			await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
+				username: session.user.username,
+			})
+		}
 	}
 
 	return (
@@ -133,7 +137,7 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 			{/* Buttons */}
 			<div className='bg-white p-5 w-full flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
-					<AiOutlineHeart className='btn' onCLick={likePost} />
+					<AiOutlineHeart className='btn' onClick={likePost} />
 					<AiOutlineComment className='btn' />
 					<HiOutlinePaperAirplane className='btn rotate-90' />
 				</div>
@@ -149,21 +153,35 @@ const Post = ({ id, userName, userImg, postImage, caption }) => {
 			</p>
 
 			{/* Comments */}
-			{
-				comments.length > 0 && (
-					<div className='ml-10 h-20 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300'>
-						{comments.map(comment => (
-							<div key={comment.id} className="flex items-center gap-2 mb-3">
-								<img src={comment.data().userImage} alt="" className='h-7 w-7 rounded-full object-contain' />
-								<p className='text-sm flex-1'> <span className='font-bold'>{comment.data().username} </span>{comment.data().comment}</p>
-								<Moment fromNow className='pr-5 text-xs text-gray-700'>
-									{ comment.data().timestamp?.toDate()}
-								</Moment>
-							</div>
-						))}
-					</div>
-				)
-			}
+			{comments.length > 0 && (
+				<div className='ml-10 h-20 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300'>
+					{comments.map((comment) => (
+						<div
+							key={comment.id}
+							className='flex items-center gap-2 mb-3'
+						>
+							<img
+								src={comment.data().userImage}
+								alt=''
+								className='h-7 w-7 rounded-full object-contain'
+							/>
+							<p className='text-sm flex-1'>
+								{' '}
+								<span className='font-bold'>
+									{comment.data().username}{' '}
+								</span>
+								{comment.data().comment}
+							</p>
+							<Moment
+								fromNow
+								className='pr-5 text-xs text-gray-700'
+							>
+								{comment.data().timestamp?.toDate()}
+							</Moment>
+						</div>
+					))}
+				</div>
+			)}
 
 			{/* Input Box */}
 			<form className='flex items-center p-4'>
