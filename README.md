@@ -37,9 +37,7 @@ The comments and posts also update in realtime
 - [React Moment](https://www.npmjs.com/package/react-moment)
 
 ## Demo
-Not avalable yet.
-
-I am currently looking for help with vercel deployment
+View a live demo [here](https://instagram-clone-two-neon.vercel.app/)
 
 ## Preview
 
